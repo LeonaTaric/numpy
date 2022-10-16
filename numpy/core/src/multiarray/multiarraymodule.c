@@ -30,6 +30,7 @@
 #include "npy_import.h"
 #include "convert_datatype.h"
 #include "legacy_dtype_implementation.h"
+#include "stdio.h"
 
 NPY_NO_EXPORT int NPY_NUMUSERTYPES = 0;
 
@@ -3817,6 +3818,8 @@ compare_chararrays(PyObject *NPY_UNUSED(dummy), PyObject *args, PyObject *kwds)
     return NULL;
 }
 
+#define _p(obj) {if (obj != NULL) { PyObject_Print(obj, stdout, Py_PRINT_RAW); printf("\n"); } }
+
 static PyObject *
 _vec_string_with_args(PyArrayObject* char_array, PyArray_Descr* type,
                       PyObject* method, PyObject* args)
@@ -3873,7 +3876,9 @@ _vec_string_with_args(PyArrayObject* char_array, PyArray_Descr* type,
 
         for (i = 0; i < n; i++) {
             PyArrayIterObject* it = in_iter->iters[i];
+            _p(it)
             PyObject* arg = PyArray_ToScalar(PyArray_ITER_DATA(it), it->ao);
+            _p(arg)
             if (arg == NULL) {
                 Py_DECREF(args_tuple);
                 goto err;

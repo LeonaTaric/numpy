@@ -9688,3 +9688,17 @@ def test_sort_uint():
     arr = rng.integers(low=0, high=maxv, size=N).astype('uint32')
     arr[np.random.choice(arr.shape[0], 10)] = maxv
     assert_equal(np.sort(arr, kind='quick'), np.sort(arr, kind='heap'))
+
+
+class TestVecString:
+    """ np. """
+
+    def test_x00(self):
+        from numpy.core.defchararray import rsplit
+        import numpy as np
+
+
+        x = np.frombuffer(b'___\0++++' * 3, dtype='S8')
+
+        print(x[0].rsplit(b'\0'))
+        rsplit(x, b'\0')
